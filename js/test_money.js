@@ -93,7 +93,7 @@ class MoneyTest {
   }
 
   runAllTests() {
-    let testMethods = this.getAllTestMethods();
+    let testMethods = this.randomizeTestOrder(this.getAllTestMethods());
     testMethods.forEach((m) => {
       console.log('Running: %s()', m);
       let method = Reflect.get(this, m);
@@ -116,6 +116,14 @@ class MoneyTest {
     let testMethods = allProps.filter((p) => {
       return typeof moneyPrototype[p] === 'function' && p.startsWith('test');
     });
+    return testMethods;
+  }
+
+  randomizeTestOrder(testMethods) {
+    for (let i = testMethods.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [testMethods[i], testMethods[j]] = [testMethods[j], testMethods[i]];
+    }
     return testMethods;
   }
 }
